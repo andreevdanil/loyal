@@ -1,7 +1,7 @@
-from typing import Final, Dict
+from typing import Dict
 import logging.config
 
-LEVEL: Final = "info"
+LEVEL = "info"
 
 CONFIG: Dict = {
     "version": 1,

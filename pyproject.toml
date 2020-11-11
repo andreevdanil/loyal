@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "loyal"
+version = "0.1.0"
+description = "Backend server"
+authors = ["Daniil Andreev <d2234@mail.ru>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aiohttp = "^3.7"
+yarl = "^1.6"
+attrs = "^20.3"
+uvloop = "^0.14"
+ujson = "^4.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.1"]
+build-backend = "poetry.core.masonry.api"

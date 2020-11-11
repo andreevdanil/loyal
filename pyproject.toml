@@ -11,6 +11,7 @@ yarl = "^1.6"
 attrs = "^20.3"
 uvloop = "^0.14"
 ujson = "^4.0"
+environs = "^9.2"
 
 [tool.poetry.dev-dependencies]
 

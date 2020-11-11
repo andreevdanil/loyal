@@ -1,6 +1,9 @@
+from environs import Env
 from aiohttp import web
 
 import loyal
+
+env = Env()
 
 
 def create_app() -> web.Application:
@@ -11,11 +14,12 @@ def create_app() -> web.Application:
 
 def main() -> None:
     app = create_app()
+    port = env.int("PORT", 8080)
 
     web.run_app(
         app,
         host="0.0.0.0",
-        port=8080,
+        port=port,
     )
 
 

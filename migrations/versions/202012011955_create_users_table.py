@@ -7,7 +7,7 @@ Create Date: 2020-12-01 19:55:37.319233
 """
 import sqlalchemy as sa
 from alembic import op
-from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP
+from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP, INTEGER
 
 revision = "a07ccb9c10a6"
 down_revision = "1b81f93b9c27"
@@ -24,6 +24,7 @@ def upgrade():
         sa.Column("second_name", TEXT, nullable=False),
         sa.Column("email", TEXT, nullable=False),
         sa.Column("password_id", UUID, nullable=False),
+        sa.Column("balance", INTEGER, nullable=False),
         sa.Column("created_at", TIMESTAMP, nullable=False),
 
         sa.ForeignKeyConstraint(

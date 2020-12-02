@@ -1,23 +1,54 @@
+import asyncio
 import logging
-from typing import Dict
+from concurrent.futures.thread import ThreadPoolExecutor
+from typing import Dict, TypedDict
 import uvloop
 from aiohttp import web
 
+from .helpers import set_db
 from .middlewares import register_middlewares
 from .views import register_views
-from loyal.log import install_log
+from loyal.infrastructure import DBConfig, DB
+from loyal.log import setup_logging
 
 logger = logging.getLogger("app")
 
 
-def create_app(config: Dict) -> web.Application:
-    install_log()
+class AppConfig(TypedDict):
+    db: DBConfig
+
+
+def register_db(app: web.Application, db_config: DBConfig) -> None:
+    db = DB.from_config(db_config)
+    set_db(app, db)
+
+    app.on_startup.append(lambda _: db.setup())
+    app.on_cleanup.append(lambda _: db.cleanup())
+
+
+def asyncio_exception_handler(_, context: Dict) -> None:
+    message = "Caught asyncio exception: {message}".format_map(context)
+    logger.warning(message)
+
+
+def setup_asyncio() -> None:
     uvloop.install()
+    loop = asyncio.get_event_loop()
+
+    executor = ThreadPoolExecutor(thread_name_prefix="loyal")
+    loop.set_default_executor(executor)
+
+    loop.set_exception_handler(asyncio_exception_handler)
+
+
+async def create_app(config: AppConfig) -> web.Application:
+    setup_logging()
+    setup_asyncio()
 
     app = web.Application(logger=logger)
-    app["config"] = config
-
-    register_middlewares(app)
     register_views(app)
+    register_middlewares(app)
+
+    register_db(app, config["db"])
 
     return app

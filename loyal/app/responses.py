@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Dict
+from typing import Dict, Any
 import ujson
 from aiohttp import web
 
@@ -7,6 +7,7 @@ __all__ = (
     "create_response",
     "ok",
     "error",
+    "validation_error",
     "server_error",
 )
 
@@ -37,6 +38,12 @@ def error(
     return create_response(body, status)
 
 
-def server_error() -> web.Response:
+def validation_error(errors: Any) -> web.Response:  # 422
+    status = HTTPStatus.UNPROCESSABLE_ENTITY
+    message = "Input payload validation failed"
+    return error(status, message, errors)
+
+
+def server_error() -> web.Response:  # 500
     status = HTTPStatus.INTERNAL_SERVER_ERROR
     return error(status, message="Internal server error. Try again later")

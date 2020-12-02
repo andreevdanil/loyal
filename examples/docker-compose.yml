@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+
+  loyal_api:
+    image: loyal:latest
+    container_name: loyal_api
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@loyal_db:5432/${DB_DATABASE}
+    ports:
+      - 8080:8080
+    depends_on:
+      - loyal_migrations
+    networks:
+      - loyal_network
+
+  loyal_migrations:
+    image: loyal:latest
+    container_name: loyal_migrations
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@ad_matching_db:5432/${DB_DATABASE}
+    depends_on:
+      - loyal_db
+    command: sh -c "sleep 3 && alembic upgrade head"
+    networks:
+      - loyal_network
+
+  loyal_db:
+    image: postgres:13-alpine
+    container_name: loyal_db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DATABASE=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - ad_matching_network
+
+networks:
+  loyal_network:
+    name: loyal_network

@@ -3,25 +3,18 @@ from aiohttp import web
 
 import loyal
 
-env = Env()
-
 
 def create_app() -> web.Application:
-    config = {}
+    env = Env()
 
-    return loyal.create_app(config)
+    config = {
+        "db": {
+            "pool": {
+                "dsn": env.str("DATABASE_URL"),
+                "min_size": env.int("DATABASE_POOL_MIN_SIZE", 1),
+                "max_size": env.int("DATABASE_POOL_MAX_SIZE", 10),
+            },
+        },
+    }
 
-
-def main() -> None:
-    app = create_app()
-    port = env.int("PORT", 8080)
-
-    web.run_app(
-        app,
-        host="0.0.0.0",
-        port=port,
-    )
-
-
-if __name__ == "__main__":
-    main()
+    return await loyal.create_app(config)

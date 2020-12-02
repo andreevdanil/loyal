@@ -1,2 +1,1 @@
-init_db: alembic upgrade head
-web: python main.py
+web: gunicorn main:create_app -c gunicorn.config.py

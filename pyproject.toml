@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "loyal"
 version = "0.1.0"
-description = "Backend server"
+description = "Backend for Loyal mobile app"
 authors = ["Daniil Andreev <d2234@mail.ru>"]
 
 [tool.poetry.dependencies]
@@ -12,9 +12,25 @@ attrs = "^20.3"
 uvloop = "^0.14"
 ujson = "^4.0"
 environs = "^9.2"
+asyncpg = "^0.21.0"
+marshmallow = "^3.9.1"
+alembic = "^1.4.3"
+psycopg2 = "^2.8.6"
+StrEnum = "^0.4.2"
 
 [tool.poetry.dev-dependencies]
+add-trailing-comma = "^2.0"
+bandit = "^1.6"
+cobertura_clover_transform = "^1.1"
+coverage = "^5.3"
+flake8 = "^3.8"
+isort = "^4.3"
+mypy = "^0.790"
+pylint = "^2.6"
+pytest = "^6.1"
+pytest-alembic = "^0.2"
+unittest_xml_reporting = "^3.0"
 
 [build-system]
-requires = ["poetry-core>=1.1"]
+requires = ["poetry-core>=1.1.3"]
 build-backend = "poetry.core.masonry.api"

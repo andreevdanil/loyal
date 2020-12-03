@@ -40,14 +40,14 @@ class AsyncpgUserRepository(UserRepositoryInterface):
                 , $2::TEXT
                 , $3::TEXT
                 , $4::TEXT
-                , $2::UUID
-                , $3::FLOAT
-                , $4::TIMESTAMP
+                , $5::UUID
+                , $6::FLOAT
+                , $7::TIMESTAMP
             )
             ;
          """
 
-        await self.pool.execute(
+        await self.pool.fetch(
             query,
             uid,
             first_name,

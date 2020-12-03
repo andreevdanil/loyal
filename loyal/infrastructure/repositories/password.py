@@ -38,7 +38,7 @@ class AsyncpgPasswordRepository(PasswordRepositoryInterface):
             ;
         """
 
-        await self.pool.execute(
+        await self.pool.fetch(
             query,
             pid,
             salt,

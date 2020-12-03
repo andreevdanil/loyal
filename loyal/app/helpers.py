@@ -4,7 +4,11 @@ from aiohttp import web
 from strenum import StrEnum
 
 from loyal.domain import AccountService
-from loyal.infrastructure import DB
+from loyal.infrastructure import (
+    DB,
+    AsyncpgUserRepository,
+    AsyncpgPasswordRepository,
+)
 
 __all__ = (
     "set_jwt_secret",
@@ -38,14 +42,14 @@ def get_db(app: web.Application) -> DB:
     return app[AppKeys.DB]
 
 
-def get_user_repository(app: web.Application) -> UserRepository:
+def get_user_repository(app: web.Application) -> AsyncpgUserRepository:
     db = get_db(app)
-    return UserRepository(db.pool)
+    return AsyncpgUserRepository(db.pool)
 
 
-def get_password_repository(app: web.Application) -> PasswordRepository:
+def get_password_repository(app: web.Application) -> AsyncpgPasswordRepository:
     db = get_db(app)
-    return PasswordRepository(db.pool)
+    return AsyncpgPasswordRepository(db.pool)
 
 
 def get_account_service(app: web.Application) -> AccountService:

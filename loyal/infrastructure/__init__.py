@@ -1,10 +1,10 @@
 from .db import DB, DBConfig
-from .repositories import AsyncpgUsersRepository, AsyncpgPasswordsRepository
+from .repositories import AsyncpgUserRepository, AsyncpgPasswordRepository
 
 __all__ = (
     "DB",
     "DBConfig",
 
-    "AsyncpgUsersRepository",
-    "AsyncpgPasswordsRepository",
+    "AsyncpgUserRepository",
+    "AsyncpgPasswordRepository",
 )

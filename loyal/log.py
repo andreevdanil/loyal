@@ -76,7 +76,6 @@ CONFIG: Final[dict] = {
                 'logger="%(name)s" '
                 'service_name="%(service_name)s" '
                 'pid="%(process)d" '
-                'request_id="%(request_id)s" '
                 'message="%(message)s" '
             ),
             "datefmt": DATETIME_FORMAT,

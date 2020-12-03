@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 import attr
@@ -20,8 +21,9 @@ class AsyncpgUserRepository(UserRepositoryInterface):
         uid: UUID,
         first_name: str,
         last_name: str,
-        password_id: UUID,
         email: str,
+        password_id: UUID,
+        balance: float,
         created_at: datetime,
     ):
         query = """
@@ -42,7 +44,7 @@ class AsyncpgUserRepository(UserRepositoryInterface):
                 , $3::FLOAT
                 , $4::TIMESTAMP
             )
-             ;
+            ;
          """
 
         await self.pool.execute(
@@ -50,12 +52,13 @@ class AsyncpgUserRepository(UserRepositoryInterface):
             uid,
             first_name,
             last_name,
-            password_id,
             email,
+            password_id,
+            balance,
             created_at,
         )
 
-    async def find_by_id(self, uid: UUID) -> Account:
+    async def find_by_id(self, uid: UUID) -> Optional[Account]:
         query = """
             SELECT
                 id
@@ -76,7 +79,7 @@ class AsyncpgUserRepository(UserRepositoryInterface):
         record = await self.pool.fetchrow(query, uid)
         return Account(**record)
 
-    async def find_by_email(self, email: str) -> Account:
+    async def find_by_email(self, email: str) -> Optional[Account]:
         query = """
             SELECT
                 id
@@ -89,10 +92,10 @@ class AsyncpgUserRepository(UserRepositoryInterface):
             FROM
                 users
             WHERE
-                users.email = $1:TEXT
+                users.email = $1::TEXT
             LIMIT 1
             ;
         """
 
         record = await self.pool.fetchrow(query, email)
-        return Account(**record)
+        return Account(**record) if record else None

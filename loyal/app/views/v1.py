@@ -15,7 +15,7 @@ __all__ = ("register_api_v1",)
 
 async def register_view(request: web.Request) -> web.Response:
     body = await utils.get_json(request)
-    account_service = get_account_service(request.app)
+    account_service = get_account_service(request.match_info.apps[0])
 
     register_credentials = RegisterRequestSchema().load(body)
     user = await account_service.register(register_credentials)
@@ -26,7 +26,7 @@ async def register_view(request: web.Request) -> web.Response:
 
 async def login_view(request: web.Request) -> web.Response:
     body = await utils.get_json(request)
-    account_service = get_account_service(request.app)
+    account_service = get_account_service(request.match_info.apps[0])
 
     login_credentials = LoginRequestSchema().load(body)
     token = await account_service.login(login_credentials)

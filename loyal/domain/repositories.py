@@ -6,7 +6,7 @@ __all__ = (
 )
 
 from datetime import datetime
-from typing import Tuple
+from typing import Optional
 
 from uuid import UUID
 
@@ -21,18 +21,19 @@ class UserRepositoryInterface(ABC):
         uid: UUID,
         first_name: str,
         last_name: str,
-        password_id: UUID,
         email: str,
+        password_id: UUID,
+        balance: float,
         created_at: datetime,
     ):
         pass
 
     @abstractmethod
-    async def find_by_id(self, uid: UUID) -> Account:
+    async def find_by_id(self, uid: UUID) -> Optional[Account]:
         pass
 
     @abstractmethod
-    async def find_by_email(self, email: str) -> Account:
+    async def find_by_email(self, email: str) -> Optional[Account]:
         pass
 
 

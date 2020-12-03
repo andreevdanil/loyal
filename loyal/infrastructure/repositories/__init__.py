@@ -1,7 +1,7 @@
-from .passwords import AsyncpgPasswordsRepository
-from .users import AsyncpgUsersRepository
+from .password import AsyncpgPasswordRepository
+from .user import AsyncpgUserRepository
 
 __all__ = (
-    "AsyncpgPasswordsRepository",
-    "AsyncpgUsersRepository",
+    "AsyncpgPasswordRepository",
+    "AsyncpgUserRepository",
 )

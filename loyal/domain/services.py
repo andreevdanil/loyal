@@ -1,7 +1,7 @@
 from uuid import UUID
 
 import attr
-from loyal.app import RegisterCredentials, LoginCredentials
+from loyal.app.shemas import RegisterCredentials, LoginCredentials
 from . import utils
 from .entities import LoginResponse
 from .exceptions import UserNotFoundError, IncorrectPasswordError
@@ -35,13 +35,15 @@ class AccountService:
         )
 
         user_id = utils.generate_uuid()
+        balance = 100
         created_at = utils.get_local_time()
         await self.user.add(
             user_id,
             credentials.first_name,
             credentials.last_name,
-            password_id,
             credentials.email,
+            password_id,
+            balance,
             created_at,
         )
         return user_id

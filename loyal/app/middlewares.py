@@ -4,8 +4,8 @@ from typing import Callable, Awaitable
 from aiohttp import web
 from aiohttp.web_exceptions import HTTPClientError
 from marshmallow import ValidationError
-
-from .responses import server_error, error, validation_error
+from loyal.domain.exceptions import UserLoginError
+from .responses import server_error, error, validation_error, unauthorized
 
 __all__ = ("register_middlewares",)
 
@@ -49,6 +49,19 @@ async def client_error_handler_middleware(
         return error(e.status, e.reason)
 
 
+@web.middleware
+async def account_error_handler_middleware(
+    request: web.Request,
+    handler: Handler,
+) -> web.StreamResponse:
+    try:
+        return await handler(request)
+    except UserLoginError as e:
+        return unauthorized(e.message)
+
+
 def register_middlewares(app: web.Application) -> None:
     app.middlewares.append(default_handler_middleware)
+    app.middlewares.append(validation_error_handler_middleware)
     app.middlewares.append(client_error_handler_middleware)
+    app.middlewares.append(account_error_handler_middleware)

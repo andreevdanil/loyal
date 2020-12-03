@@ -7,6 +7,8 @@ __all__ = (
     "create_response",
     "ok",
     "error",
+    "unauthorized",
+    "conflict",
     "validation_error",
     "server_error",
 )
@@ -36,6 +38,16 @@ def error(
         "data": data,
     }
     return create_response(body, status)
+
+
+def unauthorized(message: str) -> web.Response:  # 401
+    status = HTTPStatus.UNAUTHORIZED
+    return error(status, message)
+
+
+def conflict(message: str) -> web.Response:  # 409
+    status = HTTPStatus.CONFLICT
+    return error(status, message)
 
 
 def validation_error(errors: Any) -> web.Response:  # 422

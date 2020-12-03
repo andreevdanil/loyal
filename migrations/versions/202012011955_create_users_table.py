@@ -21,7 +21,7 @@ def upgrade():
 
         sa.Column("id", UUID, primary_key=True),
         sa.Column("first_name", TEXT, nullable=False),
-        sa.Column("second_name", TEXT, nullable=False),
+        sa.Column("last_name", TEXT, nullable=False),
         sa.Column("email", TEXT, nullable=False),
         sa.Column("password_id", UUID, nullable=False),
         sa.Column("balance", FLOAT, nullable=False),

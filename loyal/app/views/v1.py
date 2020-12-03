@@ -2,7 +2,7 @@ from aiohttp import web
 
 from loyal.app import utils
 from loyal.app.helpers import get_account_service
-from loyal.app.responses import ok
+from loyal.app.responses import ok, conflict
 from loyal.app.shemas import (
     RegisterRequestSchema,
     RegisterResponseSchema,
@@ -18,10 +18,15 @@ async def register_view(request: web.Request) -> web.Response:
     account_service = get_account_service(request.match_info.apps[0])
 
     register_credentials = RegisterRequestSchema().load(body)
-    user = await account_service.register(register_credentials)
+    user_id = await account_service.register(register_credentials)
 
-    response_data = RegisterResponseSchema().dump(user)
-    return ok(response_data)
+    if user_id is None:
+        return conflict("User already exist")
+    else:
+        data = {
+            "user_id": str(user_id),
+        }
+        return ok(data)
 
 
 async def login_view(request: web.Request) -> web.Response:
@@ -29,9 +34,9 @@ async def login_view(request: web.Request) -> web.Response:
     account_service = get_account_service(request.match_info.apps[0])
 
     login_credentials = LoginRequestSchema().load(body)
-    token = await account_service.login(login_credentials)
+    data = await account_service.login(login_credentials)
 
-    response_data = LoginResponseSchema().dump(token)
+    response_data = LoginResponseSchema().dump(data)
     return ok(response_data)
 
 

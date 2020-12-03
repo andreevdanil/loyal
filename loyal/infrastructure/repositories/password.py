@@ -56,7 +56,7 @@ class AsyncpgPasswordRepository(PasswordRepositoryInterface):
             FROM
                 passwords
             WHERE
-                passwords.id = $1:UUID
+                passwords.id = $1::UUID
             LIMIT 1
             ;
         """

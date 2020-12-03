@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 from typing import Tuple, Dict
 import jwt
+from loyal.domain import Password
 
 __all__ = (
     "generate_uuid",
@@ -38,10 +39,12 @@ def secure_password(password: str) -> Tuple[bytes, bytes]:
 
 def is_password_valid(
     password: str,
-    salt: bytes,
-    hashed_password: bytes,
+    hashed_password: Password,
 ) -> bool:
-    return hash_password(salt, password) == hashed_password
+    return hash_password(
+        hashed_password.salt,
+        password,
+    ) == hashed_password.password
 
 
 def generate_jwt(payload: Dict, secret: str) -> str:

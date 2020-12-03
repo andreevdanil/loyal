@@ -1,10 +1,11 @@
+from typing import Optional
 from uuid import UUID
 
 import attr
 from loyal.app.shemas import RegisterCredentials, LoginCredentials
 from . import utils
 from .entities import LoginResponse
-from .exceptions import UserNotFoundError, IncorrectPasswordError
+from .exceptions import UserNotFoundError, UserLoginError
 from .repositories import (
     UserRepositoryInterface,
     PasswordRepositoryInterface,
@@ -19,15 +20,18 @@ class AccountService:
     user: UserRepositoryInterface
     password: PasswordRepositoryInterface
 
-    async def register(self, credentials: RegisterCredentials) -> UUID:
+    async def register(
+        self,
+        credentials: RegisterCredentials,
+    ) -> Optional[UUID]:
         account = await self.user.find_by_email(credentials.email)
         if account:
-            return account.id
+            return None
 
         password_id = utils.generate_uuid()
         salt, hashed_password = utils.secure_password(credentials.password)
         created_at = utils.get_local_time()
-        password_id = await self.password.add(
+        await self.password.add(
             password_id,
             salt,
             hashed_password,
@@ -51,19 +55,18 @@ class AccountService:
     async def login(self, credentials: LoginCredentials) -> LoginResponse:
         account = await self.user.find_by_email(credentials.email)
         if not account:
-            raise UserNotFoundError
+            raise UserLoginError
 
-        salt, hashed_password = await self.password.find(account.password_id)
+        hashed_password = await self.password.find(account.password_id)
 
         if not utils.is_password_valid(
             credentials.password,
-            salt,
             hashed_password,
         ):
-            raise IncorrectPasswordError
+            raise UserLoginError
 
         jwt_payload = {
-            "user_id": account.id,
+            "user_id": str(account.id),
         }
         jwt = utils.generate_jwt(jwt_payload, self.jwt_secret)
 

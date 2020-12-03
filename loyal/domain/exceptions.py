@@ -6,5 +6,5 @@ class UserNotFoundError(AccountError):
     pass
 
 
-class IncorrectPasswordError(AccountError):
-    pass
+class UserLoginError(AccountError):
+    message = "Incorrect login or password"

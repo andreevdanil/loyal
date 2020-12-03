@@ -17,14 +17,14 @@ class Account:
     last_name: str
     balance: int
     email: str
-    password: bytes
+    password_id: UUID
     created_at: datetime
 
 
 @attr.s(auto_attribs=True, slots=True, frozen=True)
 class LoginResponse:
     id: UUID
-    token: str
+    access_token: str
 
 
 @attr.s(auto_attribs=True, slots=True, frozen=True)

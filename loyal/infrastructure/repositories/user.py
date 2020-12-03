@@ -30,7 +30,7 @@ class AsyncpgUserRepository(UserRepositoryInterface):
             INSERT INTO users (
                 id
                 , first_name
-                , second_name
+                , last_name
                 , email
                 , password_id
                 , balance
@@ -63,7 +63,7 @@ class AsyncpgUserRepository(UserRepositoryInterface):
             SELECT
                 id
                 , first_name
-                , second_name
+                , last_name
                 , email
                 , password_id
                 , balance
@@ -84,7 +84,7 @@ class AsyncpgUserRepository(UserRepositoryInterface):
             SELECT
                 id
                 , first_name
-                , second_name
+                , last_name
                 , email
                 , password_id
                 , balance

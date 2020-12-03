@@ -9,7 +9,7 @@ STDOUT = "-"
 backlog = env("GUNICORN_BACKLOG", 2048)
 
 # The port to bind.
-port = env("GUNICORN_PORT", 8080)
+port = env("PORT", 8080)
 
 # The socket to bind.
 bind = env("GUNICORN_BIND", f"0.0.0.0:{port}")

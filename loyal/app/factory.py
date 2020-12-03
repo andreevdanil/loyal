@@ -5,7 +5,7 @@ from typing import Dict, TypedDict
 import uvloop
 from aiohttp import web
 
-from .helpers import set_db
+from .helpers import set_db, set_jwt_secret
 from .middlewares import register_middlewares
 from .views import register_views
 from loyal.infrastructure import DBConfig, DB
@@ -15,6 +15,7 @@ logger = logging.getLogger("app")
 
 
 class AppConfig(TypedDict):
+    jwt_secret: str
     db: DBConfig
 
 
@@ -49,6 +50,7 @@ async def create_app(config: AppConfig) -> web.Application:
     register_views(app)
     register_middlewares(app)
 
+    set_jwt_secret(app, config["jwt_secret"])
     register_db(app, config["db"])
 
     return app

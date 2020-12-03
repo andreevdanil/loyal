@@ -8,6 +8,7 @@ def create_app() -> web.Application:
     env = Env()
 
     config = {
+        "jwt_secret": env.str("JWT_SECRET", "secret"),
         "db": {
             "pool": {
                 "dsn": env.str("DATABASE_URL"),

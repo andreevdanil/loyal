@@ -15,8 +15,8 @@ __all__ = (
 
 @attr.s(auto_attribs=True, frozen=True, slots=True)
 class RegisterCredentials:
-    first_name = str
-    last_name = str
+    first_name: str
+    last_name: str
     email: str
     password: str
 

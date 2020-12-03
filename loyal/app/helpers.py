@@ -2,9 +2,12 @@ from enum import unique
 
 from aiohttp import web
 from strenum import StrEnum
+
+from loyal.domain import AccountService
 from loyal.infrastructure import DB
 
 __all__ = (
+    "set_jwt_secret",
     "set_db",
     "get_db",
     "get_user_repository",
@@ -15,7 +18,16 @@ __all__ = (
 
 @unique
 class AppKeys(StrEnum):
+    JWT_SECRET = "jwt_secret"
     DB = "db"
+
+
+def set_jwt_secret(app: web.Application, secret: str) -> None:
+    app[AppKeys.JWT_SECRET] = secret
+
+
+def get_jwt_secret(app: web.Application) -> str:
+    return app[AppKeys.JWT_SECRET]
 
 
 def set_db(app: web.Application, db: DB) -> None:
@@ -37,6 +49,7 @@ def get_password_repository(app: web.Application) -> PasswordRepository:
 
 
 def get_account_service(app: web.Application) -> AccountService:
+    jwt_secret = get_jwt_secret(app)
     users_repository = get_user_repository(app)
     passwords_repository = get_password_repository(app)
-    return AccountService(users_repository, passwords_repository)
+    return AccountService(jwt_secret, users_repository, passwords_repository)

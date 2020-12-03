@@ -1,25 +1,26 @@
+from datetime import datetime
 from uuid import UUID
 
 import attr
 
 __all__ = (
-    "UserID",
+    "Account",
     "LoginResponse",
-    "Balance",
 )
 
 
 @attr.s(auto_attribs=True, slots=True, frozen=True)
-class UserID:
+class Account:
     id: UUID
+    first_name: str
+    last_name: str
+    balance: int
+    email: str
+    password: bytes
+    created_at: datetime
 
 
 @attr.s(auto_attribs=True, slots=True, frozen=True)
 class LoginResponse:
-    id: UserID
+    id: UUID
     token: str
-
-
-@attr.s(auto_attribs=True, slots=True, frozen=True)
-class Balance:
-    value: int

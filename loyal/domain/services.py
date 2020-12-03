@@ -24,8 +24,15 @@ class AccountService:
         if account:
             return account.id
 
+        password_id = utils.generate_uuid()
         salt, hashed_password = utils.secure_password(credentials.password)
-        password_id = await self.password.add(salt, hashed_password)
+        created_at = utils.get_local_time()
+        password_id = await self.password.add(
+            password_id,
+            salt,
+            hashed_password,
+            created_at,
+        )
 
         user_id = utils.generate_uuid()
         created_at = utils.get_local_time()
@@ -44,7 +51,7 @@ class AccountService:
         if not account:
             raise UserNotFoundError
 
-        salt, hashed_password = await self.password.get(account.password_id)
+        salt, hashed_password = await self.password.find(account.password_id)
 
         if not utils.is_password_valid(
             credentials.password,

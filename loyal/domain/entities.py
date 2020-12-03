@@ -6,6 +6,7 @@ import attr
 __all__ = (
     "Account",
     "LoginResponse",
+    "Password",
 )
 
 
@@ -24,3 +25,11 @@ class Account:
 class LoginResponse:
     id: UUID
     token: str
+
+
+@attr.s(auto_attribs=True, slots=True, frozen=True)
+class Password:
+    id: UUID
+    salt: bytes
+    password: bytes
+    created_at: datetime

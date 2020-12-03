@@ -1,6 +1,6 @@
 from .entities import (
-    UserID,
-    Balance,
+    Account,
+    Password,
     LoginResponse,
 )
 from .repositories import (
@@ -10,8 +10,8 @@ from .repositories import (
 from .services import AccountService
 
 __all__ = (
-    "UserID",
-    "Balance",
+    "Account",
+    "Password",
     "LoginResponse",
 
     "UserRepositoryInterface",

@@ -10,18 +10,10 @@ from typing import Tuple
 
 from uuid import UUID
 
-from .entities import Account
+from .entities import Account, Password
 
 
 class UserRepositoryInterface(ABC):
-
-    @abstractmethod
-    async def find_by_id(self, uid: UUID) -> Account:
-        pass
-
-    @abstractmethod
-    async def find_by_email(self, email: str) -> Account:
-        pass
 
     @abstractmethod
     async def add(
@@ -32,16 +24,30 @@ class UserRepositoryInterface(ABC):
         password_id: UUID,
         email: str,
         created_at: datetime,
-    ) -> Account:
+    ):
+        pass
+
+    @abstractmethod
+    async def find_by_id(self, uid: UUID) -> Account:
+        pass
+
+    @abstractmethod
+    async def find_by_email(self, email: str) -> Account:
         pass
 
 
 class PasswordRepositoryInterface(ABC):
 
     @abstractmethod
-    async def add(self, salt: bytes, password: bytes) -> UUID:
+    async def add(
+        self,
+        pid: UUID,
+        salt: bytes,
+        password: bytes,
+        created_at: datetime,
+    ):
         pass
 
     @abstractmethod
-    async def get(self, password_id: UUID) -> Tuple[bytes, bytes]:
+    async def find(self, password_id: UUID) -> Password:
         pass

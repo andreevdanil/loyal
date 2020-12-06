@@ -1,5 +1,6 @@
 from http import HTTPStatus
-from typing import Dict, Any
+from typing import Any, Dict
+
 import ujson
 from aiohttp import web
 
@@ -8,15 +9,16 @@ __all__ = (
     "ok",
     "error",
     "unauthorized",
+    "not_found",
     "conflict",
     "validation_error",
     "server_error",
 )
 
 
-def create_response(body: Dict, status: HTTPStatus) -> web.Response:
+def create_response(body: Dict, code: int) -> web.Response:
     payload = ujson.dumps(body)
-    return web.json_response(text=payload, status=status)
+    return web.json_response(text=payload, status=code)
 
 
 def ok(data: Dict = None, message: str = "OK") -> web.Response:
@@ -28,20 +30,21 @@ def ok(data: Dict = None, message: str = "OK") -> web.Response:
     return create_response(body, status)
 
 
-def error(
-    status: HTTPStatus,
-    message: str = None,
-    data: Dict = None,
-) -> web.Response:
+def error(code: int, message: str = None, data: Dict = None) -> web.Response:
     body = {
-        "message": message or status.description,
+        "message": message or HTTPStatus(code).description,
         "data": data,
     }
-    return create_response(body, status)
+    return create_response(body, code)
 
 
 def unauthorized(message: str) -> web.Response:  # 401
     status = HTTPStatus.UNAUTHORIZED
+    return error(status, message)
+
+
+def not_found(message: str) -> web.Response:  # 404
+    status = HTTPStatus.NOT_FOUND
     return error(status, message)
 
 

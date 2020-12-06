@@ -2,14 +2,14 @@ from typing import Optional
 from uuid import UUID
 
 import attr
-from loyal.app.shemas import RegisterCredentials, LoginCredentials
+
+from loyal.app.shemas import LoginCredentials, RegisterCredentials
+
 from . import utils
-from .entities import LoginResponse
-from .exceptions import UserNotFoundError, UserLoginError
-from .repositories import (
-    UserRepositoryInterface,
-    PasswordRepositoryInterface,
-)
+from .entities import Account, LoginResponse
+from .exceptions import UserLoginError, UserNotFoundError
+from .repositories import PasswordRepositoryInterface, UserRepositoryInterface
+from loyal.infrastructure import EthereumService
 
 __all__ = ("AccountService",)
 
@@ -19,6 +19,7 @@ class AccountService:
     jwt_secret: str
     user: UserRepositoryInterface
     password: PasswordRepositoryInterface
+    ethereum: EthereumService
 
     async def register(
         self,
@@ -39,15 +40,14 @@ class AccountService:
         )
 
         user_id = utils.generate_uuid()
-        balance = 100
         created_at = utils.get_local_time()
         await self.user.add(
             user_id,
             credentials.first_name,
             credentials.last_name,
             credentials.email,
+            credentials.eth_address,
             password_id,
-            balance,
             created_at,
         )
         return user_id
@@ -59,22 +59,21 @@ class AccountService:
 
         hashed_password = await self.password.find(account.password_id)
 
-        if not utils.is_password_valid(
-            credentials.password,
-            hashed_password,
-        ):
+        if not utils.is_password_valid(credentials.password, hashed_password):
             raise UserLoginError
 
-        jwt_payload = {
+        payload = {
             "user_id": str(account.id),
         }
-        jwt = utils.generate_jwt(jwt_payload, self.jwt_secret)
+        jwt = utils.generate_jwt(payload, self.jwt_secret)
 
         return LoginResponse(account.id, jwt)
 
-    async def get_balance(self, user_id: UUID) -> int:
+    async def get_user_info(self, user_id: UUID) -> Account:
         account = await self.user.find_by_id(user_id)
         if not account:
             raise UserNotFoundError
 
-        return account.balance
+        account.balance = self.ethereum.get_balance(account.eth_address)
+
+        return account

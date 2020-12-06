@@ -1,3 +1,6 @@
-from .app import create_app
+from .app import AppConfig, create_app
 
-__app__ = ("create_app",)
+__app__ = (
+    "AppConfig",
+    "create_app",
+)

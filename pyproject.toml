@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "loyal"
 version = "0.1.0"
-description = "Backend for Loyal mobile app"
+description = "Backend part for Loyal mobile app"
 authors = ["Daniil Andreev <d2234@mail.ru>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 aiohttp = "^3.7"
 gunicorn = "^20.0.4"
 uvloop = "^0.14"
@@ -19,7 +19,8 @@ alembic = "^1.4"
 psycopg2 = "^2.8"
 StrEnum = "^0.4"
 PyJWT = "^1.7"
-
+web3 = "^5.13.1"
+py-solc-x = "^1.0.1"
 
 [tool.poetry.dev-dependencies]
 add-trailing-comma = "^2.0"

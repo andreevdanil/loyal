@@ -1,16 +1,14 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+from typing import Optional
+from uuid import UUID
+
+from .entities import Account, Password
 
 __all__ = (
     "UserRepositoryInterface",
     "PasswordRepositoryInterface",
 )
-
-from datetime import datetime
-from typing import Optional
-
-from uuid import UUID
-
-from .entities import Account, Password
 
 
 class UserRepositoryInterface(ABC):
@@ -22,10 +20,10 @@ class UserRepositoryInterface(ABC):
         first_name: str,
         last_name: str,
         email: str,
+        eth_address: str,
         password_id: UUID,
-        balance: float,
         created_at: datetime,
-    ):
+    ) -> None:
         pass
 
     @abstractmethod

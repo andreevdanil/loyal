@@ -1,11 +1,12 @@
-import logging
-from typing import Callable, Awaitable
+from typing import Awaitable, Callable
 
 from aiohttp import web
 from aiohttp.web_exceptions import HTTPClientError
 from marshmallow import ValidationError
+
 from loyal.domain.exceptions import UserLoginError
-from .responses import server_error, error, validation_error, unauthorized
+
+from .responses import error, server_error, unauthorized, validation_error
 
 __all__ = ("register_middlewares",)
 

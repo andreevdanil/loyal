@@ -2,14 +2,16 @@ import asyncio
 import logging
 from concurrent.futures.thread import ThreadPoolExecutor
 from typing import Dict, TypedDict
+
 import uvloop
 from aiohttp import web
 
-from .helpers import set_db, set_jwt_secret
+from loyal.infrastructure import DB, DBConfig, EthConfig, make_eth_client
+from loyal.log import setup_logging
+
+from .helpers import set_db, set_jwt_secret, set_eth
 from .middlewares import register_middlewares
 from .views import register_views
-from loyal.infrastructure import DBConfig, DB
-from loyal.log import setup_logging
 
 logger = logging.getLogger("app")
 
@@ -17,6 +19,7 @@ logger = logging.getLogger("app")
 class AppConfig(TypedDict):
     jwt_secret: str
     db: DBConfig
+    ethereum: EthConfig
 
 
 def register_db(app: web.Application, db_config: DBConfig) -> None:
@@ -25,6 +28,11 @@ def register_db(app: web.Application, db_config: DBConfig) -> None:
 
     app.on_startup.append(lambda _: db.setup())
     app.on_cleanup.append(lambda _: db.cleanup())
+
+
+def register_eth(app: web.Application, eth_config: EthConfig) -> None:
+    eth = make_eth_client(eth_config)
+    set_eth(app, eth)
 
 
 def asyncio_exception_handler(_, context: Dict) -> None:
@@ -52,5 +60,6 @@ async def create_app(config: AppConfig) -> web.Application:
 
     set_jwt_secret(app, config["jwt_secret"])
     register_db(app, config["db"])
+    register_eth(app, config["ethereum"])
 
     return app

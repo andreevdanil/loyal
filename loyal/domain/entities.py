@@ -10,15 +10,16 @@ __all__ = (
 )
 
 
-@attr.s(auto_attribs=True, slots=True, frozen=True)
+@attr.s(auto_attribs=True, slots=True)
 class Account:
     id: UUID
     first_name: str
     last_name: str
-    balance: int
     email: str
+    eth_address: str
     password_id: UUID
     created_at: datetime
+    balance: float = attr.ib(default=None)
 
 
 @attr.s(auto_attribs=True, slots=True, frozen=True)

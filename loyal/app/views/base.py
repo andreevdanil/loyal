@@ -1,5 +1,7 @@
-from aiohttp import web, hdrs
+from aiohttp import hdrs, web
+
 from loyal.app.responses import ok
+
 from .v1 import register_api_v1
 
 __all__ = ("register_views",)

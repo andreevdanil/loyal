@@ -2,8 +2,10 @@ import hashlib
 import os
 import uuid
 from datetime import datetime
-from typing import Tuple, Dict
-import jwt
+from typing import Dict, Tuple
+
+import jwt as pyjwt
+
 from loyal.domain import Password
 
 __all__ = (
@@ -48,4 +50,5 @@ def is_password_valid(
 
 
 def generate_jwt(payload: Dict, secret: str) -> str:
-    return jwt.encode(payload, secret, algorithm="HS256")
+    jwt = pyjwt.encode(payload, secret, algorithm="HS256")
+    return jwt.decode()

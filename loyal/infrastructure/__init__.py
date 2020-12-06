@@ -1,10 +1,15 @@
 from .db import DB, DBConfig
-from .repositories import AsyncpgUserRepository, AsyncpgPasswordRepository
+from .ethereum import EthConfig, EthereumService, make_eth_client
+from .repositories import AsyncpgPasswordRepository, AsyncpgUserRepository
 
 __all__ = (
     "DB",
     "DBConfig",
 
-    "AsyncpgUserRepository",
+    "EthConfig",
+    "EthereumService",
+    "make_eth_client",
+
     "AsyncpgPasswordRepository",
+    "AsyncpgUserRepository",
 )

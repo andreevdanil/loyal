@@ -1,11 +1,10 @@
 from datetime import datetime
-from typing import Tuple
 from uuid import UUID
 
 import attr
 from asyncpg.pool import Pool
 
-from loyal.domain import PasswordRepositoryInterface, Password
+from loyal.domain import Password, PasswordRepositoryInterface
 
 __all__ = (
     "AsyncpgPasswordRepository",

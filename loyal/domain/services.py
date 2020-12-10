@@ -62,6 +62,9 @@ class AccountService:
         if not utils.is_password_valid(credentials.password, hashed_password):
             raise UserLoginError
 
+        if account.eth_address != credentials.eth_address:
+            raise UserLoginError
+
         payload = {
             "user_id": str(account.id),
         }

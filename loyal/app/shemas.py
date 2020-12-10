@@ -46,11 +46,13 @@ class RegisterResponseSchema(Schema):
 class LoginCredentials:
     email: str
     password: str
+    eth_address: str
 
 
 class LoginRequestSchema(Schema):
     email = fields.Email(required=True)
     password = fields.Str(required=True)
+    eth_address = fields.Str(required=True)
 
     @post_load
     def make_credentials(self, data: Dict, **kwargs) -> LoginCredentials:

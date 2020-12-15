@@ -18,7 +18,7 @@ async def create_app() -> web.Application:
         },
         "ethereum": {
             "node_url": env.str("ETH_NODE_URL", "wss://kovan.infura.io/ws/v3/776e4318c8844d01830f74bc865059ea"),
-            "contract_address": "0x7Ab27De7f189b5bCd0Af6cc62239ed25143a79dF",
+            "contract_address": "0x1AA87f0bdcDFdbBd7Be8381Ca3BD379A01e246Da",
         },
     }
 
